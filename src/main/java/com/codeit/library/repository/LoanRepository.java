@@ -29,5 +29,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
         LocalDate cutoffDate = LocalDate.now().minusDays(14);
         return existsOverdueLoan(memberId, cutoffDate);
     }
+
+    long countByBookIdAndReturnDateIsNull(Long bookId, LocalDate returnDate);
 }
 
