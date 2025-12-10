@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("도서 도메인 테스트")
 class BookTest {
@@ -67,11 +66,21 @@ class BookTest {
 
         @Test
         @DisplayName("10% 할인을 적용할 수 있다.")
-        void discount() {
+        void applyDiscount_10Percent() {
             //when
             book.applyDiscount(10);
             //then
         assertThat(book.getPrice()).isEqualTo(27000);
+        }
+
+        @Test
+        @DisplayName("0% 할인율이면 가격이 변하지않는다.")
+        void applyDiscount_0Percent(){
+            //when
+            book.applyDiscount(0);
+
+            //then
+            assertThat(book.getPrice()).isEqualTo(30000);
         }
 
         @Test
@@ -84,7 +93,7 @@ class BookTest {
         }
 
         @Test
-        @DisplayName("10% 할인을 적용할 수 있다.")
+        @DisplayName("할인율이 음수면 예외가 발생한다.")
         void applyDiscount_NegativeRate() {
             //when & then
             assertThatThrownBy(()->book.applyDiscount(-10))

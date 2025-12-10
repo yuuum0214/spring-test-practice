@@ -31,6 +31,10 @@ public class Book {
     private LocalDate publishedDate;
 
     public Book(Long id, String title, String author, String isbn, Integer price) {
+        validateTitle(title);
+        validateAuthor(author);
+        validatePrice(price);
+
         this.id = id;
         this.title = title;
         this.author = author;

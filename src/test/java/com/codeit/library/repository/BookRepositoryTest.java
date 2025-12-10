@@ -1,7 +1,6 @@
 package com.codeit.library.repository;
 
 import com.codeit.library.domain.Book;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest // JPA 관련 컴포넌트만 로딩
 @DisplayName("도서 Repository 테스트")
@@ -29,9 +27,9 @@ class BookRepositoryTest {
         @DisplayName("저자 이름으로 책을 검색할 수 있다.")
         void findByAuthor() {
             // given
-            bookRepository.save(new Book("클린 코드", "로버트 마틴", "111" , 30000));
-            bookRepository.save(new Book("클린 아키텍처", "로버트 마틴", "222" , 32000));
-            bookRepository.save(new Book("리팩토링", "마틴 파울ㄹ러", "333" , 35000));
+            bookRepository.save(new Book("클린 코드", "로버트 마틴", "111", 30000));
+            bookRepository.save(new Book("클린 아키텍처", "로버트 마틴", "222", 32000));
+            bookRepository.save(new Book("리팩토링", "마틴 파울러", "333", 35000));
 
             // when
             List<Book> books = bookRepository.findByAuthor("로버트 마틴");
@@ -49,7 +47,7 @@ class BookRepositoryTest {
         @DisplayName("ISBN으로 책을 검색할 수 있다.")
         void findByIsbn() {
             //given
-            bookRepository.save(new Book("클린 코드", "로버트 마틴", "987-1234567890" , 30000));
+            bookRepository.save(new Book("클린 코드", "로버트 마틴", "987-1234567890", 30000));
 
             // when
             Optional<Book> found = bookRepository.findByIsbn("987-0132456266");
@@ -87,45 +85,45 @@ class BookRepositoryTest {
             assertThat(books).hasSize(1);
             assertThat(books.get(0).getTitle()).isEqualTo("최신 비싼 책");
         }
-    }
 
-    @Test
-    @DisplayName("저자만 지정하여 검색한다")
-    void searchByAuthorOnly() {
-        // given
-        bookRepository.save(new Book("클린 아키텍처", "로버트 마틴", "222" , 32000));
-        bookRepository.save(new Book("리팩토링", "마틴 파울ㄹ러", "333" , 35000));
+        @Test
+        @DisplayName("저자만 지정하여 검색한다")
+        void searchByAuthorOnly() {
+            // given
+            bookRepository.save(new Book("클린 아키텍처", "로버트 마틴", "222", 32000));
+            bookRepository.save(new Book("리팩토링", "마틴 파울러", "333", 35000));
 
-        // when
-        List<Book> books = bookRepository.searchBooks("로버트 마틴", null, null);
-        // then
-        assertThat(books).hasSize(1);
-    }
+            // when
+            List<Book> books = bookRepository.searchBooks("로버트 마틴", null, null);
+            // then
+            assertThat(books).hasSize(1);
+        }
 
-    @Test
-    @DisplayName("저자만 지정하여 검색한다")
-    void searchByPriceRangeOnly() {
-        // given
-        bookRepository.save(new Book("클린 아키텍처", "로버트 마틴", "222" , 32000));
-        bookRepository.save(new Book("리팩토링", "마틴 파울ㄹ러", "333" , 35000));
+        @Test
+        @DisplayName("가격 범위만 지정하여 검색한다")
+        void searchByPriceRangeOnly() {
+            // given
+            bookRepository.save(new Book("클린 아키텍처", "로버트 마틴", "222", 32000));
+            bookRepository.save(new Book("리팩토링", "마틴 파울러", "333", 35000));
 
-        // when
-        List<Book> books = bookRepository.searchBooks(null, 25000, 35000);
-        // then
-        assertThat(books).hasSize(2);
-    }
+            // when
+            List<Book> books = bookRepository.searchBooks(null, 25000, 35000);
+            // then
+            assertThat(books).hasSize(2);
+        }
 
-    @Test
-    @DisplayName("조건을 지정하지 않으면 모든 책을 조회한다.")
-    void searchAllIfNotCondition() {
-        // given
-        bookRepository.save(new Book("클린 아키텍처", "로버트 마틴", "222" , 32000));
-        bookRepository.save(new Book("리팩토링", "마틴 파울러", "333" , 35000));
-        bookRepository.save(new Book("리팩토링2", "마틴 파울러", "334[" , 35000));
+        @Test
+        @DisplayName("조건을 지정하지 않으면 모든 책을 조회한다.")
+        void searchAllIfNotCondition() {
+            // given
+            bookRepository.save(new Book("클린 아키텍처", "로버트 마틴", "222", 32000));
+            bookRepository.save(new Book("리팩토링", "마틴 파울러", "333", 35000));
+            bookRepository.save(new Book("리팩토링2", "마틴 파울러", "444", 60000));
 
-        // when
-        List<Book> books = bookRepository.searchBooks(null, null, null);
-        // then
-        assertThat(books).hasSize(3);
+            // when
+            List<Book> books = bookRepository.searchBooks(null, null, null);
+            // then
+            assertThat(books).hasSize(3);
+        }
     }
 }

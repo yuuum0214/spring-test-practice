@@ -24,11 +24,10 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(MockitoExtension.class) //Mockito 활성화
 @DisplayName("대출 서비스 테스트")
 class LoanServiceTest {
 
@@ -57,6 +56,7 @@ class LoanServiceTest {
             Book book = new Book(bookId, "클린 코드", "로버트 마틴" ,"987-1234567890", 30000);
 
             //Mock 동작 정의
+            // loadService.createLoan()을 호출하면서 발생할 수 있는 모든 상황을 가정하여 Mock 객체에 세팅
             when(memberRepository.findById(memberId)).thenReturn(Optional.of(member));
             when(bookRepository.findById(bookId)).thenReturn(Optional.of(book));
             when(loanRepository.countByMemberIdAndReturnDateIsNull(memberId)).thenReturn(2l);
@@ -64,7 +64,7 @@ class LoanServiceTest {
             when(loanRepository.existsOverdueLoan(memberId)).thenReturn(false);
 
             Loan loan = new Loan(member, book, LocalDate.now());
-            when(loanRepository.save(loan)).thenReturn(loan);
+            when(loanRepository.save(any(Loan.class))).thenReturn(loan);
 
             LoanCreateRequest request = new LoanCreateRequest(memberId, bookId);
             // when
@@ -74,6 +74,10 @@ class LoanServiceTest {
             assertThat(response).isNotNull();
             assertThat(response.getMemberId()).isEqualTo(memberId);
             assertThat(response.getBookId()).isEqualTo(bookId);
+
+            // 이 메서드가 실제로 호출되었니? 를 확인
+            // 가짜 객체는 실제로 DB 연동하지 않기 때문에 서비스의 특정 메서드가 호출될 때
+            // 실수로 메서드 호출 상황을 연출하지 않아도 테스트가 통과되는 경우가 있습니다. 그걸 확인하는 용도입니다.
 
             verify(loanRepository).countByMemberIdAndReturnDateIsNull(memberId);
             verify(loanRepository).existsByBookIdAndReturnDateIsNull(bookId);
@@ -127,7 +131,7 @@ class LoanServiceTest {
 
         @Test
         @DisplayName("대출 시 반납예정일은 14일 후로 설정된다")
-        void creawteLoan_checkDueDate() {
+        void createLoan_checkDueDate() {
             // given
             LocalDate today = LocalDate.now();
             LocalDate expectDueDate = today.plusDays(14);
@@ -164,7 +168,7 @@ class LoanServiceTest {
             Loan captorValue = loanCaptor.getValue();
 
             assertThat(captorValue.getLoanDate()).isEqualTo(today);
-//            assertThat(captorValue.getLoanDate()).plusDays(14).
+            assertThat(captorValue.getLoanDate().plusDays(14)).isEqualTo(expectDueDate);
         }
 
     }
@@ -178,8 +182,8 @@ class LoanServiceTest {
         void returnBook_Success() {
             // given
             Long loanId = 1L;
-            Long bookId = 1L;
             Long memberId = 1L;
+            Long bookId = 1L;
 
             Member member = new Member(memberId, "홍길동", "abc1234@naver.com");
             Book book = new Book(bookId, "클린 코드", "로버트 마틴" ,"987-1234567890", 30000);
