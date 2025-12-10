@@ -1,0 +1,7 @@
+spring:
+  sql:
+    init:
+      mode: never #테스트 할 때는 data.sql 로딩하지 마!
+  jpa:
+    hibernate:
+      ddl-auto: create-drop #테스트 시작할 때 만들고 끝나면 다 날려버려!
