@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -19,11 +20,13 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<MemberResponse> createMember(@Valid @RequestBody MemberCreateRequest request) {
-        MemberResponse response = memberService.createMember(request);
+    public ResponseEntity<MemberResponse> createMember(
+            @Valid @RequestPart("request") MemberCreateRequest request,
+            @RequestPart("file") MultipartFile file) {
+        MemberResponse response = memberService.createMember(request, file);
         return ResponseEntity
-            .created(URI.create("/api/members/" + response.getId()))
-            .body(response);
+                .created(URI.create("/api/members/" + response.getId()))
+                .body(response);
     }
 
     @GetMapping("/{id}")
@@ -46,8 +49,8 @@ public class MemberController {
 
     @PatchMapping("/{id}/name")
     public ResponseEntity<MemberResponse> updateName(
-        @PathVariable Long id,
-        @RequestParam String name
+            @PathVariable Long id,
+            @RequestParam String name
     ) {
         MemberResponse response = memberService.updateName(id, name);
         return ResponseEntity.ok(response);

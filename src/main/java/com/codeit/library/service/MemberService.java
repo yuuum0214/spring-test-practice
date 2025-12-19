@@ -7,25 +7,40 @@ import com.codeit.library.exception.DuplicateEmailException;
 import com.codeit.library.exception.MemberNotFoundException;
 import com.codeit.library.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final S3FileService s3FileService;
 
     @Transactional
-    public MemberResponse createMember(MemberCreateRequest request) {
+    public MemberResponse createMember(MemberCreateRequest request, MultipartFile file) {
         if (memberRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateEmailException(request.getEmail());
         }
-        
+
+        // AWS S3와 연동해서 프로필 파일을 전송하는 로직
+        try {
+            // 이 url을 DB에 회원정보와 함께 저장하세요.
+            // 나중에 프론트에서 회원 정보를 요청할 때 url도 같이 전달 ->  프론트에서 <img> 등으로 요청을 보낼 겁니다.
+            String url = s3FileService.uploadFileToFolder(file, "users/profile/");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
         Member member = new Member(request.getName(), request.getEmail());
         Member saved = memberRepository.save(member);
         

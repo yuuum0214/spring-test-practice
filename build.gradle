@@ -33,6 +33,9 @@ dependencies {
 	// Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+    implementation platform('software.amazon.awssdk:bom:2.20.56')
+    implementation 'software.amazon.awssdk:s3'
 	
 	// Test Dependencies (테스트 작성을 위한 의존성)
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
