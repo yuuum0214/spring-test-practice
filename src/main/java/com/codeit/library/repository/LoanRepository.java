@@ -5,10 +5,12 @@ import com.codeit.library.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 
+@Repository
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     List<Loan> findByMember(Member member);
@@ -30,6 +32,6 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
         return existsOverdueLoan(memberId, cutoffDate);
     }
 
-    long countByBookIdAndReturnDateIsNull(Long bookId, LocalDate returnDate);
+//    long countByBookIdAndReturnDateIsNull(Long bookId, LocalDate returnDate);
 }
 

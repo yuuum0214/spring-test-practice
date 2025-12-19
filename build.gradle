@@ -36,6 +36,7 @@ dependencies {
 	
 	// Test Dependencies (테스트 작성을 위한 의존성)
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'org.postgresql:postgresql'
 }
 
 tasks.named('test') {

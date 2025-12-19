@@ -1,16 +1,18 @@
 spring:
   application:
     name: library-management
-  
+
+  # 기본 프로필 (로컬 개발용)
   datasource:
-    url: jdbc:h2:mem:librarydb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+#    url: jdbc:postgresql://my-postgres:5432/postgres #jdbc:h2:mem:librarydb
+    url: jdbc:postgresql:localhost:5432/postgres
+    driver-class-name: org.postgresql.Driver #org.h2.Driver
+    username: postgres
+    password: postgres
   
   h2:
     console:
-      enabled: true
+      enabled: off
       path: /h2-console
   
   jpa:
@@ -29,4 +31,18 @@ spring:
 
 server:
   port: 8080
+
+---
+
+# Docker 환경용 프로필 (스프링 초기화 시 프로필 active가 docker라면 아래 설정을 우선시하겠다.)
+Spring:
+  config:
+    activate:
+      on-profile: docker
+
+  # 환경 변수로 외부에서 주입 받음
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_URL}
+    password: ${SPRING_DATASOURCE_URL}
 
