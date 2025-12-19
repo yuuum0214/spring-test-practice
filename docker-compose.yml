@@ -13,6 +13,7 @@ services: # 실행할 여러 컨테이너들을 정의
       # docker compose에서는 컨테이너 이름 뿐만 아니라 service의 이름으로도 컨테이너를 지목할 수 있음.
       - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
       - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_PASSWORD}
       # JVM 메모리 설정
       - JAVA_OPTS="-Xmx400m -Xms200m"
 #    healthcheck:

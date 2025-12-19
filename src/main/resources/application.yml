@@ -35,7 +35,7 @@ server:
 ---
 
 # Docker 환경용 프로필 (스프링 초기화 시 프로필 active가 docker라면 아래 설정을 우선시하겠다.)
-Spring:
+spring:
   config:
     activate:
       on-profile: docker
@@ -43,6 +43,6 @@ Spring:
   # 환경 변수로 외부에서 주입 받음
   datasource:
     url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_URL}
-    password: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
 
