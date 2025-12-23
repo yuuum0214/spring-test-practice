@@ -5,10 +5,11 @@ spring:
   # 기본 프로필 (로컬 개발용)
   datasource:
 #    url: jdbc:postgresql://my-postgres:5432/postgres #jdbc:h2:mem:librarydb
-    url: jdbc:postgresql:localhost:5432/postgres
+#    url: jdbc:postgresql://localhost:5432/
+    url: jdbc:postgresql://myapp-postgres-db.c7w8gyewi9jn.ap-northeast-2.rds.amazonaws.com:5432/postgres
     driver-class-name: org.postgresql.Driver #org.h2.Driver
     username: postgres
-    password: postgres
+    password: ${DB_PASSWORD} #postgres02
   
   h2:
     console:
@@ -29,8 +30,25 @@ spring:
     init:
       mode: always
 
+  cloud:
+    aws:
+      credentials:
+        accessKey: ${AWS_S3_ACCESS_KEY}
+        secretKey: ${AWS_S3_SECRET_KEY}
+      region:
+        static: ap-northeast-2
+      s3:
+        bucket: s3-bucket-practice214
+
 server:
   port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+
 
 ---
 

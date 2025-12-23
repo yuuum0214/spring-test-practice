@@ -29,7 +29,7 @@ COPY --from=build /app/build/libs/*.jar app.jar
 
 # 타임존 설명
 ENV TZ=Asia/Seoul
-RUN apk add --no-cache tzdata
+RUN apk add --no-cache curl tzdata
 
 # 이 컨테이너가 시작될 대 무조건 실행해야 하는 명령어
 # CMD는 기본 실행 명령어를 의미. 컨테이너 실행 시에 다른 명령어가 주어지면 그 명령어로 대체됨.
