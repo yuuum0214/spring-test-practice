@@ -91,6 +91,24 @@ jobs:
             --task-definition my-spring-app \
             --query taskDefinition > task-definition.json
 
+          # AWS ECS에서 Task Definition을 다운로드 할 때 읽기 전용 필드들이 포함되는데
+          # 이걸 마지막 스텝에서 그대로 등록하려 하면 에러가 발생
+          # 일기 전용 필드들을 제거해 주는 작업 진행.
+          
+          sudo apt-get update && sudo apt-get install -y jq
+          
+          jq 'del(
+          .taskDefinitionArn,
+          .revision,
+          .status,
+          .requiresAttributes,
+          .compatibilities,
+          .registeredAt,
+          .registeredBy,
+          .enableFaultInjection
+          )' task-definition.json > task-definition-clean.json
+          
+          mv task-definition-clean.json task-definition.json
 
       # 9. Task Definition에 새 이미지 반영
       - name: Fill in the new image ID in task definition
